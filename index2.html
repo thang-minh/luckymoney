@@ -458,315 +458,296 @@
     </div>
   </div>
 
- <script>
-  // ===== Falling petals =====
-  const falling = document.getElementById('falling');
-  const colors = ["#FFD700", "#ff9999", "#ffe082", "#ffb3b3"];
-  for (let i = 0; i < 34; i++) {
-    const p = document.createElement('div');
-    p.className = 'petal';
-    p.style.left = Math.random()*100 + '%';
-    p.style.top = (-20 - Math.random()*300) + 'px';
-    p.style.background = colors[Math.floor(Math.random()*colors.length)];
-    p.style.animationDuration = (2.6 + Math.random()*3.2) + 's';
-    p.style.animationDelay = (Math.random()*4.5) + 's';
-    falling.appendChild(p);
-  }
+  <script>
+    // ===== Falling petals =====
+    const falling = document.getElementById('falling');
+    const colors = ["#FFD700", "#ff9999", "#ffe082", "#ffb3b3"];
+    for (let i = 0; i < 34; i++) {
+      const p = document.createElement('div');
+      p.className = 'petal';
+      p.style.left = Math.random()*100 + '%';
+      p.style.top = (-20 - Math.random()*300) + 'px';
+      p.style.background = colors[Math.floor(Math.random()*colors.length)];
+      p.style.animationDuration = (2.6 + Math.random()*3.2) + 's';
+      p.style.animationDelay = (Math.random()*4.5) + 's';
+      falling.appendChild(p);
+    }
 
-  // ===== Wishes (pure祝福) =====
-  const tetWishes = [
-    "Năm mới an khang, tiền vô như nước, cười tươi cả năm ✨",
-    "Chúc bạn 2026 vạn sự như ý, làm đâu thắng đó 🧧",
-    "Chúc bạn sức khỏe dồi dào, hạnh phúc ngập tràn ❤️",
-    "Tấn tài tấn lộc tấn bình an — mọi chuyện hanh thông 🎉",
-    "Chúc bạn học/đi làm đều “mượt”, ít stress, nhiều niềm vui 😌",
-    "Chúc bạn gặp đúng người, đúng thời, đúng cơ hội — bùng nổ luôn 🔥",
-    "Năm mới phát tài, phát lộc, phát… thêm nhiều kèo ngon 😎"
-  ];
+    // ===== Wishes (pure祝福) =====
+    const tetWishes = [
+      "Năm mới an khang, tiền vô như nước, cười tươi cả năm ✨",
+      "Chúc bạn 2026 vạn sự như ý, làm đâu thắng đó 🧧",
+      "Chúc bạn sức khỏe dồi dào, hạnh phúc ngập tràn ❤️",
+      "Tấn tài tấn lộc tấn bình an — mọi chuyện hanh thông 🎉",
+      "Chúc bạn học/đi làm đều “mượt”, ít stress, nhiều niềm vui 😌",
+      "Chúc bạn gặp đúng người, đúng thời, đúng cơ hội — bùng nổ luôn 🔥",
+      "Năm mới phát tài, phát lộc, phát… thêm nhiều kèo ngon 😎"
+    ];
 
-  // ===== Wheel config =====
-  const canvas = document.getElementById('wheelCanvas');
-  const ctx = canvas.getContext('2d');
-  const spinBtn = document.getElementById('spinBtn');
+    // ===== Wheel config =====
+    const canvas = document.getElementById('wheelCanvas');
+    const ctx = canvas.getContext('2d');
+    const spinBtn = document.getElementById('spinBtn');
 
-  // ⚠️ Wheel hiện tại KHÔNG có 5k
-  const segments = [
-    { text:"300k", value:300000, color:"#c62828", textColor:"#fff" },
-    { text:"50k", value:50000,   color:"#e57373", textColor:"#fff" },
-    { text:"100k", value:100000, color:"#f44336", textColor:"#fff" },
-    { text:"20k", value:20000,   color:"#ef9a9a", textColor:"#8E0E00" },
-    { text:"200k", value:200000, color:"#d32f2f", textColor:"#FFD700" },
-    { text:"500k", value:500000, color:"#b71c1c", textColor:"#FFD700" },
-    { text:"10k", value:10000,   color:"#ffcdd2", textColor:"#8E0E00" },
-    { text:"1 TRIỆU", value:1000000, color:"#FFD700", textColor:"#8E0E00" }
-  ];
+    const segments = [
+      { text:"10k", value:10000,   color:"#ffcdd2", textColor:"#8E0E00" },
+      { text:"20k", value:20000,   color:"#ef9a9a", textColor:"#8E0E00" },
+      { text:"50k", value:50000,   color:"#e57373", textColor:"#fff" },
+      { text:"100k", value:100000, color:"#f44336", textColor:"#fff" },
+      { text:"200k", value:200000, color:"#d32f2f", textColor:"#FFD700" },
+      { text:"300k", value:300000, color:"#c62828", textColor:"#fff" },
+      { text:"500k", value:500000, color:"#b71c1c", textColor:"#FFD700" },
+      { text:"1 TRIỆU", value:1000000, color:"#FFD700", textColor:"#8E0E00" }
+    ];
 
-  const totalSegments = segments.length;
-  const arc = 2*Math.PI/totalSegments;
-  let currentRotation = 0;
+    const totalSegments = segments.length;
+    const arc = 2*Math.PI/totalSegments;
+    let currentRotation = 0;
 
-  function drawWheel(){
-    ctx.clearRect(0,0,500,500);
-    for(let i=0;i<totalSegments;i++){
-      const a = i*arc;
+    function drawWheel(){
+      ctx.clearRect(0,0,500,500);
+      for(let i=0;i<totalSegments;i++){
+        const a = i*arc;
 
-      // slice
-      ctx.beginPath();
-      ctx.fillStyle = segments[i].color;
-      ctx.moveTo(250,250);
-      ctx.arc(250,250,250,a,a+arc);
-      ctx.closePath();
-      ctx.fill();
+        // slice
+        ctx.beginPath();
+        ctx.fillStyle = segments[i].color;
+        ctx.moveTo(250,250);
+        ctx.arc(250,250,250,a,a+arc);
+        ctx.closePath();
+        ctx.fill();
 
-      // divider
-      ctx.strokeStyle = "rgba(255,255,255,.92)";
-      ctx.lineWidth = 2;
-      ctx.stroke();
+        // divider
+        ctx.strokeStyle = "rgba(255,255,255,.92)";
+        ctx.lineWidth = 2;
+        ctx.stroke();
 
-      // text
+        // text
+        ctx.save();
+        ctx.translate(
+          250 + Math.cos(a + arc/2) * 165,
+          250 + Math.sin(a + arc/2) * 165
+        );
+        ctx.rotate(a + arc/2 + Math.PI/2);
+
+        ctx.fillStyle = segments[i].textColor || "#fff";
+        ctx.shadowColor = "rgba(0,0,0,.45)";
+        ctx.shadowBlur = 4;
+
+        const big = segments[i].value >= 200000;
+        ctx.font = big ? "900 28px Arial" : "900 20px Arial";
+        const t = segments[i].text;
+        ctx.fillText(t, -ctx.measureText(t).width/2, 0);
+
+        ctx.restore();
+      }
+
+      // ring highlight
       ctx.save();
-      ctx.translate(
-        250 + Math.cos(a + arc/2) * 165,
-        250 + Math.sin(a + arc/2) * 165
-      );
-      ctx.rotate(a + arc/2 + Math.PI/2);
-
-      ctx.fillStyle = segments[i].textColor || "#fff";
-      ctx.shadowColor = "rgba(0,0,0,.45)";
-      ctx.shadowBlur = 4;
-
-      const big = segments[i].value >= 200000;
-      ctx.font = big ? "900 28px Arial" : "900 20px Arial";
-      const t = segments[i].text;
-      ctx.fillText(t, -ctx.measureText(t).width/2, 0);
-
+      ctx.beginPath();
+      ctx.arc(250,250,246,0,2*Math.PI);
+      ctx.strokeStyle = "rgba(255,215,0,.35)";
+      ctx.lineWidth = 6;
+      ctx.stroke();
       ctx.restore();
     }
+    drawWheel();
 
-    // ring highlight
-    ctx.save();
-    ctx.beginPath();
-    ctx.arc(250,250,246,0,2*Math.PI);
-    ctx.strokeStyle = "rgba(255,215,0,.35)";
-    ctx.lineWidth = 6;
-    ctx.stroke();
-    ctx.restore();
-  }
-  drawWheel();
-
-  function formatVND(n){
-    return n.toLocaleString('vi-VN') + " đ";
-  }
-
-  // ===== History =====
-  const STORAGE_KEY = "lixi_2026_history_v1";
-  function loadHistory(){
-    try{ return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]"); }
-    catch{ return []; }
-  }
-  function saveHistory(list){
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(list.slice(0,30)));
-  }
-  function renderHistory(){
-    const box = document.getElementById("historyList");
-    const list = loadHistory();
-    if(list.length === 0){
-      box.innerHTML = `<div class="item"><small>Chưa có lượt nào. Quay phát cho nóng! 🔥</small></div>`;
-      return;
-    }
-    box.innerHTML = list.map(x => `
-      <div class="item">
-        <div><b>${escapeHtml(x.name)}</b> — ${escapeHtml(x.amountText)}</div>
-        <small>🧾 ${escapeHtml(x.code)} • ⏱ ${escapeHtml(x.time)}</small>
-      </div>
-    `).join("");
-  }
-  function escapeHtml(s){
-    return String(s).replace(/[&<>"']/g, m => ({
-      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
-    }[m]));
-  }
-  renderHistory();
-
-  // ===== Rotation helpers (đảm bảo UI khớp kết quả) =====
-  function norm360(deg){
-    deg %= 360;
-    return deg < 0 ? deg + 360 : deg;
-  }
-
-  // Tính rotation mục tiêu từ rotation hiện tại để DỪNG ĐÚNG index (không lệch)
-  function targetRotationFromCurrent(currentDeg, index, extraTurns = 5){
-    const segCenterRad = index * arc + arc/2;
-    const segCenterDeg = segCenterRad * 180 / Math.PI;
-
-    const desiredMod = norm360(270 - segCenterDeg); // pointer ở 270°
-    const currentMod = norm360(currentDeg);
-
-    let delta = desiredMod - currentMod;
-    if(delta < 0) delta += 360;
-
-    return currentDeg + extraTurns*360 + delta;
-  }
-
-  // ===== Spin =====
-  function spinWheel(){
-    const nameInput = document.getElementById('username');
-    const name = nameInput.value.trim();
-
-    if(!name){
-      alert("Nhập tên vào đã nha 😄");
-      nameInput.focus();
-      return;
+    function formatVND(n){
+      return n.toLocaleString('vi-VN') + " đ";
     }
 
-    spinBtn.disabled = true;
-    spinBtn.textContent = "ĐANG QUAY...";
-
-    const r = Math.random();
-let resultIndex;
-
-if (r < 0.95) resultIndex = 6;       // 10k (95%)
-else resultIndex = 3;               // 20k (5%)
-// index 2 (50k) sẽ không bao giờ ra
-
-
-    // ✅ ÉP UI dừng đúng ô (không dùng randomOffset nữa)
-    const finalRotation = targetRotationFromCurrent(currentRotation, resultIndex, 5);
-    currentRotation = finalRotation;
-    canvas.style.transform = `rotate(${currentRotation}deg)`;
-
-    setTimeout(()=>{
-      showResult(name, segments[resultIndex]);
-      spinBtn.disabled = false;
-      spinBtn.textContent = "NHẬN LÌ XÌ NGAY";
-    }, 5000);
-  }
-
-  function makeClaimCode(name, amount){
-    const n = name.trim().toUpperCase().replace(/\s+/g,"").slice(0,4) || "USER";
-    const rand = Math.floor(1000 + Math.random()*9000);
-    return `LX26-${n}-${amount/1000}K-${rand}`;
-  }
-
-  function showResult(name, item){
-    const modal = document.getElementById('resultModal');
-    const winnerName = document.getElementById('winnerName');
-    const modalAmount = document.getElementById('modalAmount');
-    const wishBox = document.getElementById('randomWishText');
-    const claimCodeEl = document.getElementById('claimCode');
-    const modalTitle = document.getElementById('modalTitle');
-
-    const wish = tetWishes[Math.floor(Math.random()*tetWishes.length)];
-    const code = makeClaimCode(name, item.value);
-
-    modalTitle.textContent = "🎉 CHÚC MỪNG!! 🎉";
-    winnerName.textContent = name.toUpperCase();
-    modalAmount.textContent = formatVND(item.value);
-    wishBox.textContent = `“${wish}”`;
-    claimCodeEl.textContent = code;
-
-    const now = new Date();
-    const time = now.toLocaleString('vi-VN', { hour12:false });
-    const list = loadHistory();
-    list.unshift({ name, amount:item.value, amountText: formatVND(item.value), code, time });
-    saveHistory(list);
+    // ===== History =====
+    const STORAGE_KEY = "lixi_2026_history_v1";
+    function loadHistory(){
+      try{ return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]"); }
+      catch{ return []; }
+    }
+    function saveHistory(list){
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(list.slice(0,30)));
+    }
+    function renderHistory(){
+      const box = document.getElementById("historyList");
+      const list = loadHistory();
+      if(list.length === 0){
+        box.innerHTML = `<div class="item"><small>Chưa có lượt nào. Quay phát cho nóng! 🔥</small></div>`;
+        return;
+      }
+      box.innerHTML = list.map(x => `
+        <div class="item">
+          <div><b>${escapeHtml(x.name)}</b> — ${escapeHtml(x.amountText)}</div>
+          <small>🧾 ${escapeHtml(x.code)} • ⏱ ${escapeHtml(x.time)}</small>
+        </div>
+      `).join("");
+    }
+    function escapeHtml(s){
+      return String(s).replace(/[&<>"']/g, m => ({
+        "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+      }[m]));
+    }
     renderHistory();
 
-    modal.style.display = "flex";
+    // ===== Spin =====
+    function spinWheel(){
+      const nameInput = document.getElementById('username');
+      const name = nameInput.value.trim();
 
-    popConfetti(1400);
-    tinyShake(420);
-  }
+      if(!name){
+        alert("Nhập tên vào đã nha 😄");
+        nameInput.focus();
+        return;
+      }
 
-  function closeAndReset(){
-    document.getElementById('resultModal').style.display = "none";
-    document.getElementById('username').focus();
-  }
+      spinBtn.disabled = true;
+      spinBtn.textContent = "ĐANG QUAY...";
 
-  document.getElementById('resultModal').addEventListener('click', (e)=>{
-    if(e.target.id === "resultModal") closeAndReset();
-  });
+      // Fair random
+      const resultIndex = Math.floor(Math.random()*totalSegments);
 
-  function copyClaim(){
-    const code = document.getElementById("claimCode").textContent;
-    navigator.clipboard.writeText(code).then(()=>{
-      alert("Đã copy mã nhận thưởng 🧾");
-    }).catch(()=>{
-      alert("Không copy được, bạn copy tay giúp mình nha.");
+      const segmentAngle = resultIndex*arc + arc/2;
+      const rotateAmount = (360*5) + (270 - (segmentAngle * 180/Math.PI));
+      const randomOffset = (Math.floor(Math.random()*18) - 9);
+      const finalRotation = currentRotation + rotateAmount + randomOffset;
+
+      currentRotation = finalRotation;
+      canvas.style.transform = `rotate(${currentRotation}deg)`;
+
+      setTimeout(()=>{
+        showResult(name, segments[resultIndex]);
+        spinBtn.disabled = false;
+        spinBtn.textContent = "NHẬN LÌ XÌ NGAY";
+      }, 5000);
+    }
+
+    function makeClaimCode(name, amount){
+      // mã ngắn, dễ đối soát (không bảo mật, chỉ tiện)
+      const n = name.trim().toUpperCase().replace(/\s+/g,"").slice(0,4) || "USER";
+      const rand = Math.floor(1000 + Math.random()*9000);
+      return `LX26-${n}-${amount/1000}K-${rand}`;
+    }
+
+    function showResult(name, item){
+      const modal = document.getElementById('resultModal');
+      const winnerName = document.getElementById('winnerName');
+      const modalAmount = document.getElementById('modalAmount');
+      const wishBox = document.getElementById('randomWishText');
+      const claimCodeEl = document.getElementById('claimCode');
+      const modalTitle = document.getElementById('modalTitle');
+
+      const wish = tetWishes[Math.floor(Math.random()*tetWishes.length)];
+      const code = makeClaimCode(name, item.value);
+
+      modalTitle.textContent = "🎉 CHÚC MỪNG!! 🎉";
+      winnerName.textContent = name.toUpperCase();
+      modalAmount.textContent = formatVND(item.value);
+      wishBox.textContent = `“${wish}”`;
+      claimCodeEl.textContent = code;
+
+      // save history
+      const now = new Date();
+      const time = now.toLocaleString('vi-VN', { hour12:false });
+      const list = loadHistory();
+      list.unshift({ name, amount:item.value, amountText: formatVND(item.value), code, time });
+      saveHistory(list);
+      renderHistory();
+
+      modal.style.display = "flex";
+
+      popConfetti(1400);
+      tinyShake(420);
+    }
+
+    function closeAndReset(){
+      document.getElementById('resultModal').style.display = "none";
+      // để người ta quay tiếp không cần reload
+      document.getElementById('username').focus();
+    }
+
+    // click outside close
+    document.getElementById('resultModal').addEventListener('click', (e)=>{
+      if(e.target.id === "resultModal") closeAndReset();
     });
-  }
 
-  // ===== Confetti (no libs) =====
-  const confettiCanvas = document.getElementById("confetti");
-  const cctx = confettiCanvas.getContext("2d");
-  function resizeConfetti(){
-    confettiCanvas.width = innerWidth;
-    confettiCanvas.height = innerHeight;
-  }
-  addEventListener("resize", resizeConfetti);
-  resizeConfetti();
-
-  function popConfetti(ms=1200){
-    confettiCanvas.style.display = "block";
-    const W = confettiCanvas.width, H = confettiCanvas.height;
-    const pieces = [];
-    const count = 170;
-
-    for(let i=0;i<count;i++){
-      pieces.push({
-        x: Math.random()*W,
-        y: -20 - Math.random()*H*0.2,
-        r: 2 + Math.random()*4,
-        vx: -1.8 + Math.random()*3.6,
-        vy: 2.2 + Math.random()*5.2,
-        rot: Math.random()*Math.PI,
-        vrot: -0.2 + Math.random()*0.4,
-        a: 0.9 + Math.random()*0.1
+    // ===== Copy claim code =====
+    function copyClaim(){
+      const code = document.getElementById("claimCode").textContent;
+      navigator.clipboard.writeText(code).then(()=>{
+        alert("Đã copy mã nhận thưởng 🧾");
+      }).catch(()=>{
+        alert("Không copy được, bạn copy tay giúp mình nha.");
       });
     }
 
-    const start = performance.now();
-    const draw = (t)=>{
-      const dt = t - start;
-      cctx.clearRect(0,0,W,H);
+    // ===== Confetti (no libs) =====
+    const confettiCanvas = document.getElementById("confetti");
+    const cctx = confettiCanvas.getContext("2d");
+    function resizeConfetti(){
+      confettiCanvas.width = innerWidth;
+      confettiCanvas.height = innerHeight;
+    }
+    addEventListener("resize", resizeConfetti);
+    resizeConfetti();
 
-      for(const p of pieces){
-        p.x += p.vx;
-        p.y += p.vy;
-        p.rot += p.vrot;
+    function popConfetti(ms=1200){
+      confettiCanvas.style.display = "block";
+      const W = confettiCanvas.width, H = confettiCanvas.height;
+      const pieces = [];
+      const count = 170;
 
-        cctx.save();
-        cctx.translate(p.x, p.y);
-        cctx.rotate(p.rot);
-        cctx.globalAlpha = p.a;
-        cctx.fillRect(-p.r, -p.r, p.r*2.6, p.r*1.2);
-        cctx.restore();
+      for(let i=0;i<count;i++){
+        pieces.push({
+          x: Math.random()*W,
+          y: -20 - Math.random()*H*0.2,
+          r: 2 + Math.random()*4,
+          vx: -1.8 + Math.random()*3.6,
+          vy: 2.2 + Math.random()*5.2,
+          rot: Math.random()*Math.PI,
+          vrot: -0.2 + Math.random()*0.4,
+          a: 0.9 + Math.random()*0.1
+        });
       }
 
-      if(dt < ms) requestAnimationFrame(draw);
-      else{
+      const start = performance.now();
+      const draw = (t)=>{
+        const dt = t - start;
         cctx.clearRect(0,0,W,H);
-        confettiCanvas.style.display = "none";
-      }
-    };
-    requestAnimationFrame(draw);
-  }
 
-  function tinyShake(ms=380){
-    const el = document.querySelector(".modal-card");
-    if(!el) return;
-    const start = performance.now();
-    const step = (t)=>{
-      const k = Math.max(0, 1 - (t-start)/ms);
-      const x = (Math.random()*8-4)*k;
-      const y = (Math.random()*8-4)*k;
-      el.style.transform = `translate(${x}px,${y}px)`;
-      if((t-start) < ms) requestAnimationFrame(step);
-      else el.style.transform = "";
-    };
-    requestAnimationFrame(step);
-  }
-</script>
+        for(const p of pieces){
+          p.x += p.vx;
+          p.y += p.vy;
+          p.rot += p.vrot;
 
+          cctx.save();
+          cctx.translate(p.x, p.y);
+          cctx.rotate(p.rot);
+          cctx.globalAlpha = p.a;
+          cctx.fillRect(-p.r, -p.r, p.r*2.6, p.r*1.2);
+          cctx.restore();
+        }
+
+        if(dt < ms) requestAnimationFrame(draw);
+        else{
+          cctx.clearRect(0,0,W,H);
+          confettiCanvas.style.display = "none";
+        }
+      };
+      requestAnimationFrame(draw);
+    }
+
+    function tinyShake(ms=380){
+      const el = document.querySelector(".modal-card");
+      if(!el) return;
+      const start = performance.now();
+      const step = (t)=>{
+        const k = Math.max(0, 1 - (t-start)/ms);
+        const x = (Math.random()*8-4)*k;
+        const y = (Math.random()*8-4)*k;
+        el.style.transform = `translate(${x}px,${y}px)`;
+        if((t-start) < ms) requestAnimationFrame(step);
+        else el.style.transform = "";
+      };
+      requestAnimationFrame(step);
+    }
+  </script>
 </body>
 </html>
